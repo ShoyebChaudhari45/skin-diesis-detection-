@@ -1,0 +1,24 @@
+# FastAPI & Server
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database
+pymongo
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+
+# Machine Learning
+tensorflow
+numpy
+Pillow
+scikit-learn
+matplotlib
+seaborn
+pandas
+
+# Environment
+python-dotenv

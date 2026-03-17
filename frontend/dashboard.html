@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard - AI Skin Disease Detection System">
+    <title>Dashboard — Skin Disease Detection</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">🔬</div>
+            <span>SkinAI Detect</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard" class="active">Dashboard</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/admin">Admin</a></li>
+        </ul>
+        <div class="nav-right">
+            <span id="userNameDisplay" style="color: var(--text-secondary); font-size: 0.9rem;"></span>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+            <button class="btn btn-secondary" onclick="logout()"
+                style="padding: 8px 16px; font-size: 0.85rem;">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header animate-in">
+            <h1>🏥 Dashboard</h1>
+            <p>Welcome to the AI-Based Skin Disease Detection System — powered by Deep Learning</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card animate-in animate-delay-1">
+                <div class="stat-icon purple">🧠</div>
+                <div class="stat-info">
+                    <h3 id="dashPredictions">0</h3>
+                    <p>Your Predictions</p>
+                </div>
+            </div>
+            <div class="stat-card animate-in animate-delay-2">
+                <div class="stat-icon green">✅</div>
+                <div class="stat-info">
+                    <h3>7</h3>
+                    <p>Disease Classes</p>
+                </div>
+            </div>
+            <div class="stat-card animate-in animate-delay-3">
+                <div class="stat-icon orange">🔬</div>
+                <div class="stat-info">
+                    <h3>CNN</h3>
+                    <p>Model Architecture</p>
+                </div>
+            </div>
+            <div class="stat-card animate-in animate-delay-4">
+                <div class="stat-icon blue">📊</div>
+                <div class="stat-info">
+                    <h3>HAM10K</h3>
+                    <p>Training Dataset</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid-2">
+            <!-- New Prediction Card -->
+            <div class="card animate-in animate-delay-2"
+                style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px;">
+                <div style="font-size: 3rem; margin-bottom: 16px;">🔍</div>
+                <h2 style="font-size: 1.4rem; margin-bottom: 12px;">Start New Prediction</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 320px;">
+                    Upload a skin image and get instant AI-powered diagnosis with confidence scores and precautions.
+                </p>
+                <a href="/predict" class="btn btn-primary btn-lg">
+                    📤 Upload & Predict
+                </a>
+            </div>
+
+            <!-- How it works -->
+            <div class="card animate-in animate-delay-3">
+                <h2 style="font-size: 1.3rem; margin-bottom: 20px;">⚙️ How It Works</h2>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Upload Image</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Take or upload a photo of the
+                                skin lesion</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4 style="font-size: 0.95rem; margin-bottom: 2px;">AI Analysis</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">CNN model classifies the image
+                                in seconds</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Get Results</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">View diagnosis, confidence, and
+                                precautions</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Track History</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">All predictions saved for
+                                future reference</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disease Types Section -->
+        <div style="margin-top: 40px;">
+            <h2 class="animate-in"
+                style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                🦠 Detectable Skin Diseases
+            </h2>
+            <p class="animate-in" style="color: var(--text-secondary); margin-bottom: 24px;">Our AI model can classify
+                the following 7 skin disease categories from the HAM10000 dataset</p>
+
+            <div class="disease-grid">
+                <!-- Melanoma -->
+                <div class="disease-card disease-critical animate-in animate-delay-1">
+                    <div class="disease-header">
+                        <span class="disease-emoji">⚠️</span>
+                        <span class="result-badge severity-critical">Critical</span>
+                    </div>
+                    <h3>Melanoma</h3>
+                    <p class="disease-code">Code: mel • 1,113 images</p>
+                    <p class="disease-desc">A dangerous form of skin cancer arising from melanocytes. Early detection is
+                        crucial — 5-year survival exceeds 99% when caught early.</p>
+                    <div class="disease-actions">
+                        <span>🏥 Requires immediate medical evaluation</span>
+                    </div>
+                </div>
+
+                <!-- Basal Cell Carcinoma -->
+                <div class="disease-card disease-high animate-in animate-delay-2">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🔴</span>
+                        <span class="result-badge severity-high">High</span>
+                    </div>
+                    <h3>Basal Cell Carcinoma</h3>
+                    <p class="disease-code">Code: bcc • 514 images</p>
+                    <p class="disease-desc">The most common type of skin cancer. Rarely metastasizes but can cause local
+                        tissue damage if untreated.</p>
+                    <div class="disease-actions">
+                        <span>👨‍⚕️ Consult dermatologist promptly</span>
+                    </div>
+                </div>
+
+                <!-- Actinic Keratoses -->
+                <div class="disease-card disease-moderate animate-in animate-delay-3">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🟠</span>
+                        <span class="result-badge severity-moderate">Moderate</span>
+                    </div>
+                    <h3>Actinic Keratoses</h3>
+                    <p class="disease-code">Code: akiec • 327 images</p>
+                    <p class="disease-desc">Pre-cancerous lesions caused by chronic UV exposure. Can progress to
+                        squamous cell carcinoma if left untreated.</p>
+                    <div class="disease-actions">
+                        <span>☀️ Prevent further sun damage</span>
+                    </div>
+                </div>
+
+                <!-- Benign Keratosis -->
+                <div class="disease-card disease-low animate-in animate-delay-4">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🟢</span>
+                        <span class="result-badge severity-low">Low</span>
+                    </div>
+                    <h3>Benign Keratosis</h3>
+                    <p class="disease-code">Code: bkl • 1,099 images</p>
+                    <p class="disease-desc">Includes seborrheic keratoses and solar lentigo. Generally harmless growths
+                        that do not require treatment.</p>
+                    <div class="disease-actions">
+                        <span>✅ Monitor for changes</span>
+                    </div>
+                </div>
+
+                <!-- Dermatofibroma -->
+                <div class="disease-card disease-low animate-in animate-delay-1">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🟢</span>
+                        <span class="result-badge severity-low">Low</span>
+                    </div>
+                    <h3>Dermatofibroma</h3>
+                    <p class="disease-code">Code: df • 115 images</p>
+                    <p class="disease-desc">Common benign skin growth, often appears as a small, hard bump. Usually
+                        requires no treatment unless symptomatic.</p>
+                    <div class="disease-actions">
+                        <span>✅ Usually harmless</span>
+                    </div>
+                </div>
+
+                <!-- Melanocytic Nevi -->
+                <div class="disease-card disease-low animate-in animate-delay-2">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🟢</span>
+                        <span class="result-badge severity-low">Low</span>
+                    </div>
+                    <h3>Melanocytic Nevi</h3>
+                    <p class="disease-code">Code: nv • 6,705 images</p>
+                    <p class="disease-desc">Common moles formed by clusters of melanocytes. Most are benign but monitor
+                        for asymmetry, border, or color changes (ABCDE rule).</p>
+                    <div class="disease-actions">
+                        <span>👁️ Monitor with ABCDE rule</span>
+                    </div>
+                </div>
+
+                <!-- Vascular Lesions -->
+                <div class="disease-card disease-low animate-in animate-delay-3">
+                    <div class="disease-header">
+                        <span class="disease-emoji">🔵</span>
+                        <span class="result-badge severity-low">Low-Moderate</span>
+                    </div>
+                    <h3>Vascular Lesions</h3>
+                    <p class="disease-code">Code: vasc • 142 images</p>
+                    <p class="disease-desc">Includes cherry angiomas and angiokeratomas. Blood vessel-related lesions
+                        that are generally benign.</p>
+                    <div class="disease-actions">
+                        <span>✅ Typically benign</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack Info -->
+        <div class="card animate-in"
+            style="margin-top: 32px; border: 1px solid rgba(99, 102, 241, 0.2); background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(6, 214, 160, 0.05));">
+            <h2 style="font-size: 1.2rem; margin-bottom: 16px;">🛠️ Technology Stack</h2>
+            <div class="tech-chips">
+                <span class="tech-chip">Python</span>
+                <span class="tech-chip">FastAPI</span>
+                <span class="tech-chip">TensorFlow</span>
+                <span class="tech-chip">Keras</span>
+                <span class="tech-chip">CNN</span>
+                <span class="tech-chip">MongoDB</span>
+                <span class="tech-chip">JWT Auth</span>
+                <span class="tech-chip">HTML/CSS</span>
+                <span class="tech-chip">JavaScript</span>
+                <span class="tech-chip">HAM10000</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chatbot -->
+    <button class="chatbot-toggle" id="chatbotToggle">💬</button>
+    <div class="chatbot-panel" id="chatbotPanel">
+        <div class="chatbot-header">
+            <h3>🤖 Skincare Assistant</h3>
+            <button id="chatClose"
+                style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-message bot">Hello! 👋 I'm your Skincare Assistant. Ask me about skin health, sun
+                protection, or any skin concern!</div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Ask about skincare...">
+            <button id="chatSendBtn">➤</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading...</p>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!requireAuth()) return;
+            try {
+                const data = await apiRequest('/api/history');
+                const el = document.getElementById('dashPredictions');
+                if (el) el.textContent = data.count;
+            } catch (e) {
+                console.log('Could not load prediction count');
+            }
+        });
+    </script>
+</body>
+
+</html>

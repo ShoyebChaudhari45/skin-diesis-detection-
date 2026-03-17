@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Skin Disease Detection — Presentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b1120;
+            color: #f1f5f9;
+            overflow-x: hidden
+        }
+
+        /* Slide System */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 80px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background: radial-gradient(circle at 30% 30%, #6366f1, transparent 50%), radial-gradient(circle at 70% 70%, #06d6a0, transparent 50%)
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+            z-index: 1
+        }
+
+        .slide:nth-child(even) {
+            background: #111827
+        }
+
+        /* Typography */
+        .slide-number {
+            position: absolute;
+            top: 32px;
+            right: 40px;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500
+        }
+
+        .slide-tag {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px
+        }
+
+        .tag-intro {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8
+        }
+
+        .tag-tech {
+            background: rgba(6, 214, 160, 0.15);
+            color: #06d6a0
+        }
+
+        .tag-data {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24
+        }
+
+        .tag-model {
+            background: rgba(236, 72, 153, 0.15);
+            color: #ec4899
+        }
+
+        .tag-result {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6
+        }
+
+        .tag-qa {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 16px
+        }
+
+        h1 .gradient {
+            background: linear-gradient(135deg, #6366f1, #06d6a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #f1f5f9
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #e2e8f0
+        }
+
+        p {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 1.05rem
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 700px
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-top: 32px
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 24px
+        }
+
+        /* Cards */
+        .pcard {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 28px;
+            transition: transform 0.3s
+        }
+
+        .pcard:hover {
+            transform: translateY(-4px)
+        }
+
+        .pcard-icon {
+            font-size: 2rem;
+            margin-bottom: 12px
+        }
+
+        .pcard h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e2e8f0
+        }
+
+        .pcard p {
+            font-size: 0.9rem;
+            color: #94a3b8
+        }
+
+        /* Table */
+        .ptable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 24px;
+            font-size: 0.9rem
+        }
+
+        .ptable th {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px
+        }
+
+        .ptable th:first-child {
+            border-radius: 10px 0 0 0
+        }
+
+        .ptable th:last-child {
+            border-radius: 0 10px 0 0
+        }
+
+        .ptable td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #cbd5e1
+        }
+
+        .ptable tr:hover td {
+            background: rgba(99, 102, 241, 0.05)
+        }
+
+        /* Code */
+        .code-block {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.6
+        }
+
+        .code-block .kw {
+            color: #818cf8
+        }
+
+        .code-block .fn {
+            color: #06d6a0
+        }
+
+        .code-block .str {
+            color: #fbbf24
+        }
+
+        .code-block .cm {
+            color: #64748b
+        }
+
+        /* Q&A Section */
+        .qa-item {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px
+        }
+
+        .qa-item .question {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #818cf8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .qa-item .answer {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 0.95rem
+        }
+
+        .qa-item .answer strong {
+            color: #e2e8f0
+        }
+
+        /* Flow arrow */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 32px 0;
+            flex-wrap: wrap
+        }
+
+        .flow-step {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 120px
+        }
+
+        .flow-step .flow-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px
+        }
+
+        .flow-step p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500
+        }
+
+        .flow-arrow {
+            color: #6366f1;
+            font-size: 1.5rem
+        }
+
+        /* Severity badges */
+        .sev {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700
+        }
+
+        .sev-c {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444
+        }
+
+        .sev-h {
+            background: rgba(249, 115, 22, 0.15);
+            color: #f97316
+        }
+
+        .sev-m {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24
+        }
+
+        .sev-l {
+            background: rgba(6, 214, 160, 0.15);
+            color: #06d6a0
+        }
+
+        /* Stat highlight */
+        .stat-big {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #06d6a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 4px
+        }
+
+        /* Nav dots */
+        .slide-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100
+        }
+
+        .slide-nav a {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: block;
+            transition: all 0.3s
+        }
+
+        .slide-nav a:hover,
+        .slide-nav a.active {
+            background: #6366f1;
+            transform: scale(1.3)
+        }
+
+        /* Architecture SVG */
+        .arch-svg {
+            margin: 24px auto;
+            display: block;
+            max-width: 100%
+        }
+
+        @media(max-width:768px) {
+            .slide {
+                padding: 40px 24px
+            }
+
+            h1 {
+                font-size: 2rem
+            }
+
+            h2 {
+                font-size: 1.6rem
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr
+            }
+
+            .flow {
+                flex-direction: column
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg)
+            }
+        }
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            html,
+            body {
+                background: white !important;
+                color: #0f172a !important;
+                font-size: 15px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* ── Each slide = exactly one page ── */
+            .slide {
+                width: 100% !important;
+                height: 100vh !important;
+                min-height: unset !important;
+                max-height: 100vh !important;
+                overflow: hidden !important;
+                page-break-before: always !important;
+                page-break-after: always !important;
+                break-before: page !important;
+                break-after: page !important;
+                padding: 32px 56px !important;
+                background: white !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+                box-sizing: border-box !important;
+            }
+
+            /* First slide should NOT force a blank first page */
+            .slide:first-of-type {
+                page-break-before: auto !important;
+                break-before: auto !important;
+            }
+
+            .slide:nth-child(even) {
+                background: #f8fafc !important;
+            }
+
+            /* ── QA slide: allow natural page breaks between items ── */
+            #qa {
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                page-break-after: auto !important;
+                break-after: auto !important;
+                display: block !important;
+                padding: 32px 56px !important;
+            }
+
+            .qa-item {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                margin-bottom: 14px !important;
+            }
+
+            /* ── Hide interactive elements ── */
+            .slide::before {
+                display: none !important;
+            }
+
+            .slide-nav {
+                display: none !important;
+            }
+
+            /* ── Headings ── */
+            h1 {
+                font-size: 2.2rem !important;
+                margin-bottom: 10px !important;
+                color: #0f172a !important;
+            }
+
+            h2 {
+                font-size: 1.6rem !important;
+                margin-bottom: 14px !important;
+                color: #0f172a !important;
+            }
+
+            h3 {
+                font-size: 1.1rem !important;
+                margin-bottom: 8px !important;
+                color: #0f172a !important;
+            }
+
+            h4, .slide-number, .flow-step p {
+                color: #0f172a !important;
+            }
+
+            h1 .gradient {
+                background: none !important;
+                -webkit-text-fill-color: #4f46e5 !important;
+                color: #4f46e5 !important;
+            }
+
+            /* ── Text ── */
+            p, .lead, td, .qa-item .answer {
+                color: #334155 !important;
+                font-size: 0.88rem !important;
+            }
+
+            .lead {
+                font-size: 1rem !important;
+                margin-bottom: 10px !important;
+            }
+
+            /* ── Cards & containers: never split ── */
+            .pcard,
+            .qa-item,
+            .code-block,
+            .flow-step,
+            .flow,
+            .ptable,
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .pcard {
+                background: white !important;
+                border: 1.5px solid #e2e8f0 !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+                padding: 16px 20px !important;
+                margin-bottom: 8px !important;
+            }
+
+            /* ── Grids: reduce gap for print ── */
+            .grid-2 {
+                gap: 16px !important;
+                margin-top: 14px !important;
+            }
+
+            .grid-3 {
+                gap: 12px !important;
+                margin-top: 14px !important;
+            }
+
+            .grid-4 {
+                gap: 10px !important;
+                margin-top: 10px !important;
+            }
+
+            /* ── Tables: keep together ── */
+            .ptable {
+                margin-top: 12px !important;
+                font-size: 0.82rem !important;
+            }
+
+            .ptable th {
+                background: #f1f5f9 !important;
+                color: #0f172a !important;
+                border-bottom: 2px solid #cbd5e1 !important;
+                padding: 8px 12px !important;
+            }
+
+            .ptable td {
+                border-bottom: 1px solid #e2e8f0 !important;
+                padding: 8px 12px !important;
+            }
+
+            /* Table header row never orphaned */
+            .ptable thead {
+                display: table-header-group !important;
+            }
+
+            .ptable tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* ── Flow diagrams ── */
+            .flow {
+                margin: 14px 0 !important;
+                gap: 10px !important;
+            }
+
+            .flow-step {
+                background: white !important;
+                border: 1.5px solid #e2e8f0 !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+                padding: 10px 16px !important;
+                min-width: 90px !important;
+            }
+
+            .flow-step .flow-icon {
+                font-size: 1.2rem !important;
+                margin-bottom: 3px !important;
+            }
+
+            /* ── Code blocks ── */
+            .code-block {
+                color: #0f172a !important;
+                border-color: #cbd5e1 !important;
+                background: #f8fafc !important;
+                padding: 12px 16px !important;
+                font-size: 0.78rem !important;
+            }
+
+            /* ── Q&A ── */
+            .qa-item {
+                background: white !important;
+                border: 1.5px solid #e2e8f0 !important;
+                padding: 16px 20px !important;
+            }
+
+            .qa-item .question {
+                color: #4f46e5 !important;
+                font-size: 1rem !important;
+            }
+
+            .qa-item .answer strong {
+                color: #0f172a !important;
+            }
+            /* ── Tags ── */
+            .slide-tag {
+                font-size: 0.68rem !important;
+                padding: 4px 12px !important;
+                margin-bottom: 10px !important;
+            }
+
+            .tag-intro { background: #e0e7ff !important; color: #4338ca !important; border: 1px solid #c7d2fe !important; }
+            .tag-tech  { background: #d1fae5 !important; color: #059669 !important; border: 1px solid #a7f3d0 !important; }
+            .tag-data  { background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; }
+            .tag-model { background: #fce7f3 !important; color: #be185d !important; border: 1px solid #fbcfe8 !important; }
+            .tag-result{ background: #dbeafe !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; }
+            .tag-qa    { background: #f3e8ff !important; color: #7e22ce !important; border: 1px solid #e9d5ff !important; }
+
+            /* ── Severity badges ── */
+            .sev-c { background: #fee2e2 !important; color: #b91c1c !important; }
+            .sev-h { background: #ffedd5 !important; color: #c2410c !important; }
+            .sev-m { background: #fef3c7 !important; color: #b45309 !important; }
+            .sev-l { background: #d1fae5 !important; color: #059669 !important; }
+
+            /* ── Big stats ── */
+            .stat-big {
+                font-size: 2rem !important;
+                color: #4f46e5 !important;
+                -webkit-text-fill-color: #4f46e5 !important;
+                background: none !important;
+            }
+
+            /* ── Slide content width ── */
+            .slide-content {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Nav Dots -->
+    <nav class="slide-nav">
+        <a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a>
+        <a href="#s5"></a><a href="#s6"></a><a href="#s7"></a><a href="#s8"></a>
+        <a href="#s9"></a><a href="#s10"></a><a href="#s11"></a><a href="#s12"></a>
+    </nav>
+
+    <!-- ==================== SLIDE 1: Title ==================== -->
+    <section class="slide" id="s1">
+        <div class="slide-content" style="text-align:center">
+            <span class="slide-tag tag-intro">ME Project Presentation</span>
+            <h1><span class="gradient">AI-Based Skin Disease</span><br>Detection Web Application</h1>
+            <p class="lead" style="margin:0 auto 32px">A CNN-Based Approach for Automated Dermatological
+                Diagnosis<br>using Deep Learning and Modern Web Technologies</p>
+            <div class="grid-4" style="max-width:700px;margin:32px auto 0">
+                <div>
+                    <div class="stat-big">7</div>
+                    <p style="font-size:0.85rem">Disease Classes</p>
+                </div>
+                <div>
+                    <div class="stat-big">10K</div>
+                    <p style="font-size:0.85rem">Training Images</p>
+                </div>
+                <div>
+                    <div class="stat-big">CNN</div>
+                    <p style="font-size:0.85rem">Architecture</p>
+                </div>
+                <div>
+                    <div class="stat-big">1.4M</div>
+                    <p style="font-size:0.85rem">Parameters</p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">1 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 2: Problem ==================== -->
+    <section class="slide" id="s2">
+        <div class="slide-content">
+            <span class="slide-tag tag-intro">Introduction</span>
+            <h2>Problem Statement</h2>
+            <p class="lead">Skin diseases affect millions worldwide. Early detection of melanoma improves 5-year
+                survival from 23% to 99%.</p>
+            <div class="grid-3">
+                <div class="pcard">
+                    <div class="pcard-icon">🏥</div>
+                    <h4>Limited Access</h4>
+                    <p>Shortage of dermatologists in rural areas means delayed diagnosis for millions</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">💰</div>
+                    <h4>High Cost</h4>
+                    <p>Specialist consultations and biopsies are expensive for most patients</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">⏰</div>
+                    <h4>Late Detection</h4>
+                    <p>Delayed diagnosis leads to progression of treatable conditions to advanced stages</p>
+                </div>
+            </div>
+            <div class="pcard" style="margin-top:24px;border-color:rgba(99,102,241,0.2)">
+                <h4>💡 Our Solution</h4>
+                <p>A web-based AI system that provides instant, accessible skin disease screening using CNN-based image
+                    classification, making preliminary dermatological analysis available to anyone with internet access.
+                </p>
+            </div>
+        </div>
+        <span class="slide-number">2 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 3: Objectives ==================== -->
+    <section class="slide" id="s3">
+        <div class="slide-content">
+            <span class="slide-tag tag-intro">Goals</span>
+            <h2>Objectives</h2>
+            <div class="grid-2">
+                <div class="pcard">
+                    <div class="pcard-icon">🧠</div>
+                    <h4>1. Build CNN Model</h4>
+                    <p>Develop a Convolutional Neural Network that classifies skin images into 7 disease categories
+                        using HAM10000 dataset</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">🌐</div>
+                    <h4>2. Web Application</h4>
+                    <p>Build a secure, responsive web app with FastAPI backend and modern HTML/CSS/JS frontend</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">🔐</div>
+                    <h4>3. Secure Authentication</h4>
+                    <p>Implement JWT-based signup/login with bcrypt password hashing for user security</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">📊</div>
+                    <h4>4. Complete Workflow</h4>
+                    <p>Image upload → AI prediction → disease info → precautions → history tracking → admin monitoring
+                    </p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">3 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 4: Tech Stack ==================== -->
+    <section class="slide" id="s4">
+        <div class="slide-content">
+            <span class="slide-tag tag-tech">Technology</span>
+            <h2>Technology Stack</h2>
+            <table class="ptable">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Backend</td>
+                        <td>Python, FastAPI</td>
+                        <td>REST API server, routing, CORS</td>
+                    </tr>
+                    <tr>
+                        <td>Database</td>
+                        <td>MongoDB (PyMongo)</td>
+                        <td>Store users, predictions, history</td>
+                    </tr>
+                    <tr>
+                        <td>ML Framework</td>
+                        <td>TensorFlow / Keras</td>
+                        <td>CNN model building, training, inference</td>
+                    </tr>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>HTML, CSS, JavaScript</td>
+                        <td>Responsive UI with dark mode</td>
+                    </tr>
+                    <tr>
+                        <td>Auth</td>
+                        <td>JWT + bcrypt</td>
+                        <td>Stateless token auth & password hashing</td>
+                    </tr>
+                    <tr>
+                        <td>Dataset</td>
+                        <td>HAM10000</td>
+                        <td>10,015 dermatoscopic images, 7 classes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span class="slide-number">4 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 5: Dataset ==================== -->
+    <section class="slide" id="s5">
+        <div class="slide-content">
+            <span class="slide-tag tag-data">Dataset</span>
+            <h2>HAM10000 Dataset</h2>
+            <p style="margin-bottom:24px">Human Against Machine — 10,015 dermatoscopic images across 7 diagnostic
+                categories</p>
+            <table class="ptable">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Code</th>
+                        <th>Images</th>
+                        <th>Severity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Melanocytic Nevi</td>
+                        <td>nv</td>
+                        <td>6,705</td>
+                        <td><span class="sev sev-l">Low</span></td>
+                        <td>Common moles — benign</td>
+                    </tr>
+                    <tr>
+                        <td>Melanoma</td>
+                        <td>mel</td>
+                        <td>1,113</td>
+                        <td><span class="sev sev-c">Critical</span></td>
+                        <td>Deadliest skin cancer</td>
+                    </tr>
+                    <tr>
+                        <td>Benign Keratosis</td>
+                        <td>bkl</td>
+                        <td>1,099</td>
+                        <td><span class="sev sev-l">Low</span></td>
+                        <td>Harmless growths</td>
+                    </tr>
+                    <tr>
+                        <td>Basal Cell Carcinoma</td>
+                        <td>bcc</td>
+                        <td>514</td>
+                        <td><span class="sev sev-h">High</span></td>
+                        <td>Most common skin cancer</td>
+                    </tr>
+                    <tr>
+                        <td>Actinic Keratoses</td>
+                        <td>akiec</td>
+                        <td>327</td>
+                        <td><span class="sev sev-m">Moderate</span></td>
+                        <td>Pre-cancerous lesions</td>
+                    </tr>
+                    <tr>
+                        <td>Vascular Lesions</td>
+                        <td>vasc</td>
+                        <td>142</td>
+                        <td><span class="sev sev-l">Low</span></td>
+                        <td>Blood vessel lesions</td>
+                    </tr>
+                    <tr>
+                        <td>Dermatofibroma</td>
+                        <td>df</td>
+                        <td>115</td>
+                        <td><span class="sev sev-l">Low</span></td>
+                        <td>Benign skin growths</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top:16px;font-size:0.9rem">📥 Source: Harvard Dataverse & Kaggle • Split: 70% train / 15%
+                val / 15% test (stratified)</p>
+        </div>
+        <span class="slide-number">5 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 6: Preprocessing ==================== -->
+    <section class="slide" id="s6">
+        <div class="slide-content">
+            <span class="slide-tag tag-data">Preprocessing</span>
+            <h2>Data Preprocessing & Augmentation</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Preprocessing Steps</h3>
+                    <div class="pcard" style="margin-top:12px">
+                        <p>1️⃣ <strong>Resize</strong> — all images to 224 × 224 pixels</p>
+                        <p>2️⃣ <strong>Normalize</strong> — pixel values scaled to [0, 1]</p>
+                        <p>3️⃣ <strong>Stratified Split</strong> — preserves class distribution</p>
+                        <p>4️⃣ <strong>Label Encoding</strong> — one-hot encoding for 7 classes</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Data Augmentation</h3>
+                    <div class="pcard" style="margin-top:12px">
+                        <p>🔄 <strong>Rotation</strong> — ±20 degrees</p>
+                        <p>↔️ <strong>Horizontal Flip</strong> — random flip</p>
+                        <p>↕️ <strong>Vertical Flip</strong> — random flip</p>
+                        <p>🔍 <strong>Zoom</strong> — ±20% zoom range</p>
+                        <p>📐 <strong>Shear</strong> — ±15% shear range</p>
+                        <p>↗️ <strong>Shift</strong> — ±20% width/height</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">6 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 7: CNN Architecture ==================== -->
+    <section class="slide" id="s7">
+        <div class="slide-content">
+            <span class="slide-tag tag-model">Model</span>
+            <h2>CNN Model Architecture</h2>
+            <p style="margin-bottom:20px">4 convolutional blocks + fully connected classifier — <strong>1,443,879 total
+                    parameters</strong></p>
+            <table class="ptable">
+                <thead>
+                    <tr>
+                        <th>Block</th>
+                        <th>Layers</th>
+                        <th>Filters</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Input</td>
+                        <td>224 × 224 × 3 RGB Image</td>
+                        <td>—</td>
+                        <td>224×224×3</td>
+                    </tr>
+                    <tr>
+                        <td>Block 1</td>
+                        <td>2×Conv2D + BatchNorm + ReLU + MaxPool + Dropout(0.25)</td>
+                        <td>32</td>
+                        <td>112×112×32</td>
+                    </tr>
+                    <tr>
+                        <td>Block 2</td>
+                        <td>2×Conv2D + BatchNorm + ReLU + MaxPool + Dropout(0.25)</td>
+                        <td>64</td>
+                        <td>56×56×64</td>
+                    </tr>
+                    <tr>
+                        <td>Block 3</td>
+                        <td>2×Conv2D + BatchNorm + ReLU + MaxPool + Dropout(0.30)</td>
+                        <td>128</td>
+                        <td>28×28×128</td>
+                    </tr>
+                    <tr>
+                        <td>Block 4</td>
+                        <td>2×Conv2D + BatchNorm + ReLU + MaxPool + Dropout(0.30)</td>
+                        <td>256</td>
+                        <td>14×14×256</td>
+                    </tr>
+                    <tr>
+                        <td>Classifier</td>
+                        <td>GAP → Dense(512) → BN → Dropout(0.5) → Dense(256) → BN → Dropout(0.5) → Dense(7, softmax)
+                        </td>
+                        <td>—</td>
+                        <td>7</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span class="slide-number">7 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 8: Training ==================== -->
+    <section class="slide" id="s8">
+        <div class="slide-content">
+            <span class="slide-tag tag-model">Training</span>
+            <h2>Training Pipeline</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Training Configuration</h3>
+                    <div class="pcard" style="margin-top:12px">
+                        <p><strong>Optimizer:</strong> Adam (lr=0.001)</p>
+                        <p><strong>Loss:</strong> Categorical Cross-Entropy</p>
+                        <p><strong>Epochs:</strong> 50 (with early stopping)</p>
+                        <p><strong>Batch Size:</strong> 32</p>
+                        <p><strong>Input Shape:</strong> 224 × 224 × 3</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Callbacks</h3>
+                    <div class="pcard" style="margin-top:12px">
+                        <p>💾 <strong>ModelCheckpoint</strong> — Save best model by val_accuracy</p>
+                        <p>🛑 <strong>EarlyStopping</strong> — Stop if no improvement for 10 epochs</p>
+                        <p>📉 <strong>ReduceLROnPlateau</strong> — Halve LR after 5 stagnant epochs</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flow">
+                <div class="flow-step">
+                    <div class="flow-icon">📦</div>
+                    <p>Load Data</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div class="flow-icon">🔧</div>
+                    <p>Preprocess</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div class="flow-icon">📊</div>
+                    <p>Augment</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div class="flow-icon">🧠</div>
+                    <p>Train CNN</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div class="flow-icon">✅</div>
+                    <p>Evaluate</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div class="flow-icon">💾</div>
+                    <p>Save .h5</p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">8 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 9: System Architecture ==================== -->
+    <section class="slide" id="s9">
+        <div class="slide-content">
+            <span class="slide-tag tag-tech">Architecture</span>
+            <h2>System Architecture & Application Flow</h2>
+            <div class="flow">
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">👤</div>
+                    <p>User (Browser)</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">🌐</div>
+                    <p>Frontend HTML/JS</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">⚡</div>
+                    <p>FastAPI Server</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">🧠</div>
+                    <p>CNN Model (.h5)</p>
+                </div>
+            </div>
+            <div class="flow" style="margin-top:-8px">
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">🔐</div>
+                    <p>JWT Auth</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">🗄️</div>
+                    <p>MongoDB</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">📤</div>
+                    <p>Upload Storage</p>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="min-width:140px">
+                    <div class="flow-icon">📊</div>
+                    <p>Results + History</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top:32px">API Endpoints</h3>
+            <table class="ptable">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>/api/signup</td>
+                        <td>POST</td>
+                        <td>Register new user</td>
+                    </tr>
+                    <tr>
+                        <td>/api/login</td>
+                        <td>POST</td>
+                        <td>Authenticate, return JWT</td>
+                    </tr>
+                    <tr>
+                        <td>/api/predict</td>
+                        <td>POST</td>
+                        <td>Upload image → AI prediction</td>
+                    </tr>
+                    <tr>
+                        <td>/api/history</td>
+                        <td>GET</td>
+                        <td>User's past predictions</td>
+                    </tr>
+                    <tr>
+                        <td>/api/admin/stats</td>
+                        <td>GET</td>
+                        <td>System statistics</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span class="slide-number">9 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 10: Results ==================== -->
+    <section class="slide" id="s10">
+        <div class="slide-content">
+            <span class="slide-tag tag-result">Results</span>
+            <h2>Expected Results & Performance</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Model Performance (Literature Baseline)</h3>
+                    <table class="ptable">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Expected Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Training Accuracy</td>
+                                <td>90–95%</td>
+                            </tr>
+                            <tr>
+                                <td>Validation Accuracy</td>
+                                <td>82–88%</td>
+                            </tr>
+                            <tr>
+                                <td>Test Accuracy</td>
+                                <td>80–85%</td>
+                            </tr>
+                            <tr>
+                                <td>Melanoma Sensitivity</td>
+                                <td>75–85%</td>
+                            </tr>
+                            <tr>
+                                <td>Parameters</td>
+                                <td>1,443,879</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3>Application Features</h3>
+                    <div class="pcard" style="margin-top:12px">
+                        <p>✅ Secure signup/login with JWT</p>
+                        <p>✅ Drag-and-drop image upload</p>
+                        <p>✅ Real-time AI prediction</p>
+                        <p>✅ Confidence score display</p>
+                        <p>✅ Disease info & precautions</p>
+                        <p>✅ Prediction history tracking</p>
+                        <p>✅ Admin dashboard & statistics</p>
+                        <p>✅ Dark/Light mode toggle</p>
+                        <p>✅ Skincare chatbot assistant</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">10 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 11: Future Scope ==================== -->
+    <section class="slide" id="s11">
+        <div class="slide-content">
+            <span class="slide-tag tag-tech">Future</span>
+            <h2>Future Scope & Improvements</h2>
+            <div class="grid-3">
+                <div class="pcard">
+                    <div class="pcard-icon">🔬</div>
+                    <h4>Transfer Learning</h4>
+                    <p>Fine-tune EfficientNet or ResNet for higher accuracy (90%+)</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">📱</div>
+                    <h4>Mobile App</h4>
+                    <p>Develop native Android/iOS app for bedside screening</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">🗺️</div>
+                    <h4>Grad-CAM</h4>
+                    <p>Visual attention maps to explain AI decisions</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">👨‍⚕️</div>
+                    <h4>Telemedicine</h4>
+                    <p>Connect patients with real dermatologists for second opinions</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">🌍</div>
+                    <h4>More Classes</h4>
+                    <p>Expand from 7 to 20+ disease categories using ISIC archive</p>
+                </div>
+                <div class="pcard">
+                    <div class="pcard-icon">🔒</div>
+                    <h4>Federated Learning</h4>
+                    <p>Privacy-preserving model training across hospitals</p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">11 / 12</span>
+    </section>
+
+    <!-- ==================== SLIDE 12: Thank You ==================== -->
+    <section class="slide" id="s12">
+        <div class="slide-content" style="text-align:center">
+            <span class="slide-tag tag-intro">Conclusion</span>
+            <h1>Thank You! 🙏</h1>
+            <p class="lead" style="margin:0 auto 40px">This project demonstrates the successful integration of deep
+                learning with modern web technologies to create an accessible, AI-powered skin disease screening system.
+            </p>
+            <div class="grid-3" style="max-width:600px;margin:0 auto">
+                <div>
+                    <div class="stat-big">🧠</div>
+                    <p>CNN Model</p>
+                </div>
+                <div>
+                    <div class="stat-big">⚡</div>
+                    <p>FastAPI</p>
+                </div>
+                <div>
+                    <div class="stat-big">🌐</div>
+                    <p>Full-Stack</p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">12 / 12</span>
+    </section>
+
+    <!-- ==================== Q&A SECTION ==================== -->
+    <section class="slide" id="qa" style="min-height:auto;padding:80px">
+        <div class="slide-content">
+            <span class="slide-tag tag-qa">Supplementary</span>
+            <h2>❓ Frequently Asked Questions (Viva / Q&A)</h2>
+
+            <div class="qa-item">
+                <div class="question">🎯 Q1: How do you calculate the accuracy of the model?</div>
+                <div class="answer">
+                    <strong>Accuracy = (Number of Correct Predictions) / (Total Number of Predictions) ×
+                        100</strong><br><br>
+                    We use <strong>categorical accuracy</strong> since this is a multi-class classification problem. For
+                    each test image, the model outputs a probability distribution over 7 classes. The predicted class is
+                    the one with the highest probability (argmax). If this matches the ground truth label, it's counted
+                    as correct.<br><br>
+                    Formula: <code>Accuracy = TP + TN / (TP + TN + FP + FN)</code> for each class, then averaged.<br>
+                    We also compute <strong>weighted average</strong> to account for class imbalance in HAM10000 (nv has
+                    6,705 images vs df with 115).
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">📊 Q2: What is the expected accuracy of your model?</div>
+                <div class="answer">
+                    Based on our custom CNN architecture (4 conv blocks, 1.4M parameters) and literature comparisons on
+                    HAM10000:<br>
+                    • <strong>Training Accuracy:</strong> ~90–95%<br>
+                    • <strong>Validation Accuracy:</strong> ~82–88%<br>
+                    • <strong>Test Accuracy:</strong> ~80–85%<br><br>
+                    Note: Using <strong>transfer learning</strong> (e.g., EfficientNet, ResNet-50) can boost test
+                    accuracy to <strong>90%+</strong>. The class imbalance in HAM10000 (67% Melanocytic Nevi) requires
+                    data augmentation and class weighting for fair evaluation.
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">🧠 Q3: Why did you choose CNN over other machine learning algorithms?</div>
+                <div class="answer">
+                    CNNs are the gold standard for image classification because:<br>
+                    • <strong>Automatic feature extraction</strong> — CNNs learn relevant features (edges, textures,
+                    patterns) directly from images, unlike traditional ML which requires manual feature engineering<br>
+                    • <strong>Spatial hierarchy</strong> — Convolutional layers capture local patterns, and deeper
+                    layers combine them into higher-level features<br>
+                    • <strong>Proven in dermatology</strong> — Esteva et al. (2017, Nature) demonstrated CNN performance
+                    matching 21 board-certified dermatologists<br>
+                    • Traditional ML (SVM, Random Forest) would require manually extracting features like color
+                    histograms, texture descriptors (GLCM), which is less effective.
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">🔐 Q4: How does the authentication system work?</div>
+                <div class="answer">
+                    We use <strong>JWT (JSON Web Token)</strong> based stateless authentication:<br>
+                    1. <strong>Signup:</strong> User provides name, email, password → password is hashed using
+                    <strong>bcrypt</strong> (one-way hash with salt) → stored in MongoDB<br>
+                    2. <strong>Login:</strong> Email + password submitted → bcrypt verifies hash → if valid, server
+                    generates a <strong>JWT token</strong> containing user email, role, and expiration<br>
+                    3. <strong>Protected Routes:</strong> Client sends JWT in Authorization header → server decodes and
+                    verifies the token → grants access<br>
+                    4. <strong>Security:</strong> Passwords are never stored in plaintext. JWT tokens expire after a
+                    configurable time (default: 24 hours)
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">📦 Q5: What is the HAM10000 dataset and why did you choose it?</div>
+                <div class="answer">
+                    <strong>HAM10000</strong> (Human Against Machine with 10,000 training images) was published by
+                    Tschandl et al. in 2018 in <em>Scientific Data</em> (Nature). It contains:<br>
+                    • <strong>10,015</strong> dermatoscopic images<br>
+                    • <strong>7</strong> clinically important diagnostic categories<br>
+                    • Verified by histopathology in over 50% of cases<br>
+                    • It's the standard benchmark for skin disease classification research, used in the annual ISIC
+                    challenge at MICCAI conference.
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">⚙️ Q6: What is Batch Normalization and why do you use it?</div>
+                <div class="answer">
+                    <strong>Batch Normalization</strong> (Ioffe & Szegedy, 2015) normalizes the output of each layer by
+                    adjusting and scaling the activations:<br>
+                    • <strong>Purpose:</strong> Reduces internal covariate shift — stabilizes the distribution of inputs
+                    to each layer during training<br>
+                    • <strong>Benefits:</strong> Allows higher learning rates, acts as regularization, reduces
+                    dependence on careful weight initialization<br>
+                    • <strong>How it works:</strong> For each mini-batch, it computes mean and variance, then
+                    normalizes: <code>x̂ = (x - μ) / √(σ² + ε)</code>, followed by learnable scale γ and shift β
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">🛑 Q7: What is Dropout and what rate did you use?</div>
+                <div class="answer">
+                    <strong>Dropout</strong> (Srivastava et al., 2014) is a regularization technique that randomly sets
+                    a fraction of neuron outputs to zero during training:<br>
+                    • <strong>Prevents overfitting</strong> by ensuring the network doesn't rely on any single
+                    neuron<br>
+                    • <strong>Our rates:</strong> 0.25 in early conv blocks, 0.30 in deeper conv blocks, and 0.50 in
+                    fully connected layers<br>
+                    • <strong>At inference time</strong>, all neurons are active but their outputs are scaled by (1 -
+                    dropout_rate)<br>
+                    • Higher dropout in FC layers because they have more parameters and are more prone to overfitting
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">📐 Q8: What is the role of Global Average Pooling (GAP)?</div>
+                <div class="answer">
+                    <strong>Global Average Pooling</strong> replaces traditional fully connected layers as the bridge
+                    between convolutional and classification layers:<br>
+                    • It averages each feature map into a single value — e.g., from 14×14×256 to 1×1×256 (just 256
+                    values)<br>
+                    • <strong>Advantages over Flatten:</strong> Drastically reduces parameters (prevents overfitting),
+                    provides spatial invariance, works as a structural regularizer<br>
+                    • Used in modern architectures like GoogLeNet, ResNet, and EfficientNet
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">🔄 Q9: Why is Data Augmentation important for this project?</div>
+                <div class="answer">
+                    The HAM10000 dataset has <strong>severe class imbalance</strong> (nv: 6,705 vs df: 115 images). Data
+                    augmentation helps by:<br>
+                    • <strong>Increasing effective training set size</strong> — generating new variations of existing
+                    images<br>
+                    • <strong>Reducing overfitting</strong> — model sees different versions each epoch<br>
+                    • <strong>Improving generalization</strong> — rotation, flip, zoom simulate real-world image
+                    variations<br>
+                    • <strong>Addressing class imbalance</strong> — minority classes (df, vasc) get more augmented
+                    samples, improving recall for rare diseases
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">🏗️ Q10: Why did you choose FastAPI over Flask?</div>
+                <div class="answer">
+                    <strong>FastAPI</strong> was chosen for several technical advantages:<br>
+                    • <strong>Performance:</strong> Built on Starlette and Uvicorn (ASGI) — 3-10x faster than Flask
+                    (WSGI)<br>
+                    • <strong>Async support:</strong> Native async/await for handling concurrent requests (important for
+                    ML inference)<br>
+                    • <strong>Auto-documentation:</strong> Generates Swagger UI at /docs automatically<br>
+                    • <strong>Type validation:</strong> Uses Pydantic for automatic request/response validation<br>
+                    • <strong>Modern Python:</strong> Type hints, dependency injection, middleware support out of the
+                    box
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Nav dot highlighting
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.querySelectorAll('.slide-nav a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    const activeDot = document.querySelector(`.slide-nav a[href="#${id}"]`);
+                    if (activeDot) activeDot.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(slide => observer.observe(slide));
+
+        // Keyboard navigation
+        let currentSlide = 0;
+        const slideIds = Array.from(slides).map(s => s.id);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                currentSlide = Math.min(currentSlide + 1, slideIds.length - 1);
+                document.getElementById(slideIds[currentSlide]).scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                currentSlide = Math.max(currentSlide - 1, 0);
+                document.getElementById(slideIds[currentSlide]).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+
+</html>

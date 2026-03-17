@@ -1,0 +1,139 @@
+============================================================
+   AI-BASED SKIN DISEASE DETECTION — HOW TO RUN
+============================================================
+
+📦 DATASET USED:
+   Name    : HAM10000 (Human Against Machine with 10000 training images)
+   Classes : 7 skin disease categories
+   Images  : 10,015 dermatoscopic images
+   Source  : Harvard Dataverse
+
+   🔗 DOWNLOAD LINKS:
+   1. Harvard Dataverse (Official):
+      https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBW86T
+
+   2. Kaggle (Easy Download):
+      https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000
+
+   3. ISIC Archive:
+      https://www.isic-archive.com/
+
+📊 DISEASE CLASSES:
+   1. Melanocytic Nevi (nv)         — 6,705 images — Low severity
+   2. Melanoma (mel)                — 1,113 images — CRITICAL severity
+   3. Benign Keratosis (bkl)        — 1,099 images — Low severity
+   4. Basal Cell Carcinoma (bcc)    —   514 images — High severity
+   5. Actinic Keratoses (akiec)     —   327 images — Moderate severity
+   6. Vascular Lesions (vasc)       —   142 images — Low-Moderate
+   7. Dermatofibroma (df)           —   115 images — Low severity
+
+🧠 MODEL USED:
+   Type       : Custom CNN (Convolutional Neural Network)
+   Framework  : TensorFlow / Keras
+   Input Size : 224 x 224 x 3 (RGB)
+   Parameters : 1,443,879
+   Architecture:
+     - Block 1: 2x Conv2D(32) + BatchNorm + ReLU + MaxPool + Dropout(0.25)
+     - Block 2: 2x Conv2D(64) + BatchNorm + ReLU + MaxPool + Dropout(0.25)
+     - Block 3: 2x Conv2D(128) + BatchNorm + ReLU + MaxPool + Dropout(0.30)
+     - Block 4: 2x Conv2D(256) + BatchNorm + ReLU + MaxPool + Dropout(0.30)
+     - GlobalAveragePooling → Dense(512) → Dense(256) → Dense(7, softmax)
+
+============================================================
+   STEP-BY-STEP SETUP INSTRUCTIONS
+============================================================
+
+STEP 1: Install Python 3.9+ (if not installed)
+   Download from: https://www.python.org/downloads/
+
+STEP 2: Install MongoDB (if not installed)
+   Option A — Local MongoDB:
+      Download from: https://www.mongodb.com/try/download/community
+      Install and start the MongoDB service.
+
+   Option B — MongoDB Atlas (Cloud, Free Tier):
+      Sign up at: https://www.mongodb.com/atlas
+      Create a free cluster and get your connection URI.
+
+STEP 3: Open terminal and navigate to the project folder
+   cd "d:\Kodeneurons Projects\skin dieasis detaction"
+
+STEP 4: Create virtual environment (recommended)
+   python -m venv venv
+   venv\Scripts\activate
+
+STEP 5: Install all dependencies
+   pip install -r requirements.txt
+
+STEP 6: Create environment file
+   copy .env.example .env
+
+   Then edit .env and set:
+   - MONGODB_URI=mongodb://localhost:27017  (or your Atlas URI)
+   - JWT_SECRET=any-random-secret-key
+
+STEP 7: Create the demo ML model
+   python ml_model/create_demo_model.py
+
+   This creates: ml_model/skin_disease_model.h5
+
+STEP 8: Run the server
+   python -m uvicorn backend.main:app --reload --port 8000
+
+STEP 9: Open in browser
+   http://localhost:8000
+
+============================================================
+   HOW TO TRAIN ON REAL DATASET (OPTIONAL)
+============================================================
+
+1. Download HAM10000 from Kaggle:
+   https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000
+
+2. Extract and place files in:
+   dataset/HAM10000/
+   ├── HAM10000_metadata.csv
+   ├── HAM10000_images_part_1/
+   └── HAM10000_images_part_2/
+
+3. Run training:
+   python ml_model/train.py --data_dir dataset/HAM10000 --epochs 50 --batch_size 32
+
+4. Training generates:
+   - ml_model/skin_disease_model.h5  (trained model)
+   - ml_model/results/accuracy_plot.png
+   - ml_model/results/loss_plot.png
+   - ml_model/results/confusion_matrix.png
+
+============================================================
+   APPLICATION PAGES
+============================================================
+
+   http://localhost:8000           — Login Page
+   http://localhost:8000/signup    — Signup Page
+   http://localhost:8000/dashboard — Dashboard (with disease info)
+   http://localhost:8000/predict   — Upload & Predict
+   http://localhost:8000/history   — Prediction History
+   http://localhost:8000/admin     — Admin Panel
+   http://localhost:8000/report    — Academic Report
+   http://localhost:8000/presentation — Presentation Slides + Q&A
+
+📁 SAMPLE TEST IMAGES:
+   Located in: sample_images/
+   - sample_mole_1.png
+   - sample_lesion_2.png
+   - sample_spot_3.png
+   Use these to test the prediction system on the Upload page.
+
+============================================================
+   TECH STACK SUMMARY
+============================================================
+
+   Frontend  : HTML, CSS (dark mode), JavaScript
+   Backend   : Python, FastAPI
+   Database  : MongoDB (PyMongo)
+   ML Model  : TensorFlow/Keras CNN
+   Auth      : JWT + bcrypt
+   Dataset   : HAM10000 (10,015 images, 7 classes)
+
+============================================================

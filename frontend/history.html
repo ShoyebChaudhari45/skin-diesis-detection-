@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View your skin disease prediction history">
+    <title>History — Skin Disease Detection</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">🔬</div>
+            <span>SkinAI Detect</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/history" class="active">History</a></li>
+            <li><a href="/admin">Admin</a></li>
+        </ul>
+        <div class="nav-right">
+            <span id="userNameDisplay" style="color: var(--text-secondary); font-size: 0.9rem;"></span>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+            <button class="btn btn-secondary" onclick="logout()"
+                style="padding: 8px 16px; font-size: 0.85rem;">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header animate-in">
+            <h1>Prediction History</h1>
+            <p>Your past skin disease analysis results — <strong id="historyCount">0</strong> total predictions</p>
+        </div>
+
+        <!-- Alert -->
+        <div id="historyAlert" class="alert"></div>
+
+        <!-- History Table -->
+        <div class="card animate-in animate-delay-1">
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Predicted Disease</th>
+                            <th>Confidence</th>
+                            <th>Severity</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Rows dynamically inserted by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">📭</div>
+                <h3>No Predictions Yet</h3>
+                <p>Upload a skin image to get your first AI-based prediction</p>
+                <a href="/predict" class="btn btn-primary mt-16">Start Prediction</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chatbot -->
+    <button class="chatbot-toggle" id="chatbotToggle">💬</button>
+    <div class="chatbot-panel" id="chatbotPanel">
+        <div class="chatbot-header">
+            <h3>🤖 Skincare Assistant</h3>
+            <button id="chatClose"
+                style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-message bot">Hello! 👋 I'm your Skincare Assistant. Ask me anything!</div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Ask about skincare...">
+            <button id="chatSendBtn">➤</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading...</p>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/history.js"></script>
+</body>
+
+</html>
